@@ -3,527 +3,326 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AdmitFit – Find Programs That Actually Fit</title>
+<title>AdmitFit – Executive MBA Matching</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --ink: #0f0e0d;
-  --cream: #f5f0e8;
-  --gold: #b8882a;
-  --gold-bg: rgba(184,136,42,0.08);
-  --muted: #7a7065;
-  --white: #ffffff;
-  --border: #e0d8cc;
-  --success-bg: #d4edda;
-  --success-text: #2d6a4f;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; }
-
-/* NAV */
-.nav { padding: 18px 32px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); background: var(--cream); }
-.logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; }
-.logo span { color: var(--gold); }
-.nav-tag { font-size: 12px; color: var(--muted); }
-
-/* SCREENS */
-#survey, #results { display: none; }
-
-/* HERO */
-.hero { text-align: center; padding: 72px 24px 56px; max-width: 640px; margin: 0 auto; }
-.eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; }
-.hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 52px); font-weight: 700; line-height: 1.1; letter-spacing: -1px; margin-bottom: 20px; }
-.hero h1 em { font-style: italic; color: var(--gold); }
-.hero p { font-size: 17px; font-weight: 300; color: var(--muted); line-height: 1.7; max-width: 480px; margin: 0 auto 40px; }
-.cta { display: inline-block; background: var(--ink); color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; padding: 16px 44px; border: none; cursor: pointer; border-radius: 4px; transition: all 0.2s; letter-spacing: 0.3px; }
-.cta:hover { background: var(--gold); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(184,136,42,0.3); }
-.cta.light { background: var(--gold); color: var(--white); }
-.cta.light:hover { background: var(--ink); }
-.stats { display: flex; justify-content: center; gap: 48px; margin-top: 56px; flex-wrap: wrap; }
-.stat-num { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 700; color: var(--gold); }
-.stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
-
-/* HOW IT WORKS */
-.how { padding: 56px 24px; border-top: 1px solid var(--border); max-width: 840px; margin: 0 auto; }
-.section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2.5px; color: var(--muted); text-align: center; margin-bottom: 40px; }
-.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-.step { padding: 28px; background: var(--white); border: 1px solid var(--border); border-radius: 8px; }
-.step-num { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700; color: var(--border); line-height: 1; margin-bottom: 14px; }
-.step h3 { font-size: 14px; font-weight: 500; margin-bottom: 8px; }
-.step p { font-size: 13px; color: var(--muted); line-height: 1.6; }
-
-/* BOTTOM CTA */
-.bottom-cta { background: var(--ink); color: var(--white); padding: 64px 24px; text-align: center; }
-.bottom-cta h2 { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 700; margin-bottom: 12px; }
-.bottom-cta p { color: rgba(255,255,255,0.5); font-size: 15px; margin-bottom: 36px; line-height: 1.6; }
-
-/* SURVEY */
-.back-bar { padding: 14px 32px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--muted); cursor: pointer; background: var(--white); }
-.back-bar:hover { color: var(--ink); }
-.survey-inner { max-width: 580px; margin: 0 auto; padding: 48px 24px; }
-.progress-label { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
-.progress-track { height: 2px; background: var(--border); margin-bottom: 36px; border-radius: 1px; }
-.progress-fill { height: 100%; background: var(--gold); border-radius: 1px; transition: width 0.35s ease; }
-.q-step { display: none; animation: fadeUp 0.25s ease; }
-.q-step.active { display: block; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.q-label { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 600; line-height: 1.3; margin-bottom: 6px; }
-.q-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
-.options { display: flex; flex-direction: column; gap: 9px; margin-bottom: 28px; }
-.opt { display: flex; align-items: center; gap: 12px; padding: 13px 16px; border: 1px solid var(--border); background: var(--white); cursor: pointer; border-radius: 6px; font-size: 14px; transition: all 0.12s; user-select: none; }
-.opt:hover { border-color: var(--gold); background: var(--gold-bg); }
-.opt.sel { border: 1.5px solid var(--ink); background: var(--ink); color: var(--white); }
-.opt-dot { width: 15px; height: 15px; border: 1.5px solid currentColor; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 9px; opacity: 0.6; }
-.options.multi .opt-dot { border-radius: 3px; }
-.opt.sel .opt-dot { opacity: 1; }
-.nav-btns { display: flex; gap: 10px; }
-.btn-back { padding: 13px 22px; border: 1px solid var(--border); background: transparent; font-size: 13px; cursor: pointer; border-radius: 6px; font-family: 'DM Sans', sans-serif; color: var(--ink); transition: border-color 0.15s; }
-.btn-back:hover { border-color: var(--ink); }
-.btn-next { flex: 1; padding: 13px; background: var(--ink); color: var(--white); border: none; font-size: 13px; font-weight: 500; cursor: pointer; border-radius: 6px; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
-.btn-next:hover:not(:disabled) { background: var(--gold); }
-.btn-next:disabled { background: var(--border); color: var(--muted); cursor: not-allowed; }
-
-/* EMAIL STEP */
-.field-group { margin-bottom: 16px; }
-.field-label { font-size: 11px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 7px; }
-.field-input { width: 100%; padding: 12px 15px; border: 1px solid var(--border); background: var(--white); font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; border-radius: 6px; transition: border-color 0.15s; color: var(--ink); }
-.field-input:focus { border-color: var(--gold); }
-.consent-box { display: flex; gap: 12px; align-items: flex-start; padding: 16px; background: var(--white); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 28px; }
-.consent-box input { margin-top: 2px; flex-shrink: 0; accent-color: var(--gold); }
-.consent-text { font-size: 12px; color: var(--muted); line-height: 1.6; }
-
-/* RESULTS */
-.results-inner { max-width: 720px; margin: 0 auto; padding: 52px 24px; }
-.results-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
-.results-inner h2 { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 700; margin-bottom: 10px; line-height: 1.2; }
-.results-inner > p { font-size: 15px; color: var(--muted); margin-bottom: 44px; line-height: 1.6; }
-.school-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 28px; margin-bottom: 16px; }
-.card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; gap: 12px; }
-.school-name { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 600; }
-.program-name { font-size: 13px; color: var(--muted); margin-top: 3px; }
-.fit-badge { font-size: 10px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; padding: 5px 13px; border-radius: 4px; flex-shrink: 0; white-space: nowrap; }
-.fit-badge.strong { background: var(--success-bg); color: var(--success-text); }
-.fit-badge.good { background: var(--gold-bg); color: var(--gold); }
-.fit-badge.consider { background: #f0ede8; color: var(--muted); }
-.reasons { display: flex; flex-direction: column; gap: 9px; }
-.reason { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: #555; line-height: 1.5; }
-.reason-dash { color: var(--gold); font-weight: 600; flex-shrink: 0; }
-.results-cta-box { background: var(--ink); color: var(--white); border-radius: 10px; padding: 40px; text-align: center; margin-top: 36px; }
-.results-cta-box h3 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 10px; }
-.results-cta-box p { color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 28px; line-height: 1.6; }
-.disclaimer { font-size: 11px; color: var(--muted); margin-top: 36px; line-height: 1.7; border-top: 1px solid var(--border); padding-top: 20px; }
-
-@media (max-width: 600px) {
-  .nav { padding: 16px 20px; }
-  .stats { gap: 28px; }
-  .how { padding: 48px 20px; }
-  .bottom-cta { padding: 48px 20px; }
-}
+:root{--ink:#0f0e0d;--cream:#f5f0e8;--gold:#b8882a;--gold-bg:rgba(184,136,42,0.08);--muted:#7a7065;--white:#ffffff;--border:#e0d8cc;--success-bg:#d4edda;--success-text:#2d6a4f;--secondary-bg:#f0ede8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+.nav{padding:18px 32px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);background:var(--cream)}
+.logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:700}
+.logo span{color:var(--gold)}
+.nav-badge{font-size:11px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--gold);background:var(--gold-bg);padding:4px 12px;border-radius:4px}
+#survey,#results{display:none}
+.hero{text-align:center;padding:72px 24px 56px;max-width:640px;margin:0 auto}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(30px,5vw,50px);font-weight:700;line-height:1.1;letter-spacing:-1px;margin-bottom:20px}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero p{font-size:17px;font-weight:300;color:var(--muted);line-height:1.7;max-width:500px;margin:0 auto 40px}
+.cta{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;padding:16px 44px;border:none;cursor:pointer;border-radius:4px;transition:all 0.2s;letter-spacing:0.3px}
+.cta-dark{background:var(--ink);color:var(--white)}
+.cta-dark:hover{background:var(--gold);transform:translateY(-2px);box-shadow:0 8px 24px rgba(184,136,42,0.3)}
+.cta-gold{background:var(--gold);color:var(--white)}
+.cta-gold:hover{background:var(--ink)}
+.stats{display:flex;justify-content:center;gap:48px;margin-top:56px;flex-wrap:wrap}
+.stat-num{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--gold)}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.features{padding:56px 24px;border-top:1px solid var(--border);max-width:840px;margin:0 auto}
+.section-label{font-size:11px;text-transform:uppercase;letter-spacing:2.5px;color:var(--muted);text-align:center;margin-bottom:36px}
+.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
+.feature-card{padding:24px;background:var(--white);border:1px solid var(--border);border-radius:8px}
+.feature-title{font-size:14px;font-weight:500;color:var(--gold);margin-bottom:8px}
+.feature-desc{font-size:13px;color:var(--muted);line-height:1.6}
+.bottom-cta{background:var(--ink);color:var(--white);padding:64px 24px;text-align:center}
+.bottom-cta h2{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin-bottom:12px}
+.bottom-cta p{color:rgba(255,255,255,0.5);font-size:15px;margin-bottom:36px;line-height:1.6;max-width:480px;margin-left:auto;margin-right:auto}
+.back-bar{padding:14px 32px;border-bottom:1px solid var(--border);font-size:13px;color:var(--muted);cursor:pointer;background:var(--white);transition:color 0.15s}
+.back-bar:hover{color:var(--ink)}
+.survey-inner{max-width:580px;margin:0 auto;padding:48px 24px}
+.progress-label{font-size:12px;color:var(--muted);margin-bottom:8px}
+.progress-track{height:2px;background:var(--border);margin-bottom:36px;border-radius:1px}
+.progress-fill{height:100%;background:var(--gold);border-radius:1px;transition:width 0.35s ease}
+.q-step{display:none}
+.q-step.active{display:block;animation:fadeUp 0.25s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.q-label{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;line-height:1.3;margin-bottom:6px}
+.q-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.options{display:flex;flex-direction:column;gap:9px;margin-bottom:28px}
+.opt{display:flex;align-items:center;gap:12px;padding:13px 16px;border:1px solid var(--border);background:var(--white);cursor:pointer;border-radius:6px;font-size:14px;transition:all 0.12s;user-select:none}
+.opt:hover{border-color:var(--gold);background:var(--gold-bg)}
+.opt.sel{border:1.5px solid var(--ink);background:var(--ink);color:var(--white)}
+.opt-dot{width:15px;height:15px;border:1.5px solid currentColor;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;opacity:0.6}
+.options.multi .opt-dot{border-radius:3px}
+.opt.sel .opt-dot{opacity:1}
+.nav-btns{display:flex;gap:10px}
+.btn-back{padding:13px 22px;border:1px solid var(--border);background:transparent;font-size:13px;cursor:pointer;border-radius:6px;font-family:'DM Sans',sans-serif;color:var(--ink);transition:border-color 0.15s}
+.btn-back:hover{border-color:var(--ink)}
+.btn-next{flex:1;padding:13px;background:var(--ink);color:var(--white);border:none;font-size:13px;font-weight:500;cursor:pointer;border-radius:6px;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.btn-next:hover:not(:disabled){background:var(--gold)}
+.btn-next:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
+.field-group{margin-bottom:16px}
+.field-label{font-size:11px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:7px}
+.field-input{width:100%;padding:12px 15px;border:1px solid var(--border);background:var(--white);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;border-radius:6px;transition:border-color 0.15s;color:var(--ink)}
+.field-input:focus{border-color:var(--gold)}
+.consent-box{display:flex;gap:12px;align-items:flex-start;padding:16px;background:var(--white);border:1px solid var(--border);border-radius:6px;margin-bottom:28px}
+.consent-box input{margin-top:2px;flex-shrink:0;accent-color:var(--gold)}
+.consent-text{font-size:12px;color:var(--muted);line-height:1.6}
+.results-inner{max-width:720px;margin:0 auto;padding:52px 24px}
+.results-eyebrow{font-size:11px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.results-inner h2{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;margin-bottom:10px;line-height:1.2}
+.results-intro{font-size:15px;color:var(--muted);margin-bottom:44px;line-height:1.6}
+.school-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:28px;margin-bottom:16px}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;gap:12px}
+.school-name{font-family:'Playfair Display',serif;font-size:19px;font-weight:600}
+.program-name{font-size:13px;color:var(--muted);margin-top:3px}
+.card-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.tag{font-size:11px;padding:2px 8px;border-radius:4px;background:var(--secondary-bg);color:var(--muted)}
+.tag-gold{background:var(--gold-bg);color:var(--gold)}
+.fit-badge{font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;padding:5px 13px;border-radius:4px;flex-shrink:0;white-space:nowrap}
+.fit-strong{background:var(--success-bg);color:var(--success-text)}
+.fit-good{background:var(--gold-bg);color:var(--gold)}
+.fit-consider{background:var(--secondary-bg);color:var(--muted)}
+.reasons{display:flex;flex-direction:column;gap:9px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.reason{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#555;line-height:1.5}
+.reason-dash{color:var(--gold);font-weight:600;flex-shrink:0}
+.results-cta-box{background:var(--ink);color:var(--white);border-radius:10px;padding:40px;text-align:center;margin-top:36px}
+.results-cta-box h3{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:10px}
+.results-cta-box p{color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:28px;line-height:1.6}
+.disclaimer{font-size:11px;color:var(--muted);margin-top:36px;line-height:1.7;border-top:1px solid var(--border);padding-top:20px}
+@media(max-width:600px){.nav{padding:16px 20px}.stats{gap:28px}.features{padding:48px 20px}.bottom-cta{padding:48px 20px}}
 </style>
 </head>
 <body>
-
-<!-- LANDING -->
 <div id="landing">
   <nav class="nav">
     <div class="logo">Admit<span>Fit</span></div>
-    <div class="nav-tag">Built for serious candidates</div>
+    <div class="nav-badge">Executive MBA Edition</div>
   </nav>
   <div class="hero">
-    <div class="eyebrow">Program Matching Tool</div>
-    <h1>Find programs that<br><em>actually</em> fit you</h1>
-    <p>Answer a few questions about your background and goals. Receive a tailored short list of MBA and business programs matched to your experience, target outcome, and preferred format.</p>
-    <button class="cta" onclick="startSurvey()">Get My Recommendations →</button>
+    <div class="eyebrow">Executive Program Matching</div>
+    <h1>Find the EMBA that fits<br><em>your</em> next chapter</h1>
+    <p>A matching tool built specifically for senior professionals considering an Executive MBA. Answer 12 questions. Receive a tailored short list of programs matched to your career stage, goals, and format needs.</p>
+    <button class="cta cta-dark" onclick="startSurvey()">Find My Programs →</button>
     <div class="stats">
       <div><div class="stat-num">~5 min</div><div class="stat-label">Avg. completion</div></div>
-      <div><div class="stat-num">3–5</div><div class="stat-label">Curated matches</div></div>
-      <div><div class="stat-num">25+</div><div class="stat-label">Programs considered</div></div>
+      <div><div class="stat-num">29</div><div class="stat-label">EMBA programs</div></div>
+      <div><div class="stat-num">Global</div><div class="stat-label">US, Europe & Asia</div></div>
     </div>
   </div>
-  <div class="how">
-    <div class="section-label">How it works</div>
-    <div class="steps">
-      <div class="step"><div class="step-num">01</div><h3>Answer 12 questions</h3><p>Tell us about your experience, goals, format, location, budget, and academic profile.</p></div>
-      <div class="step"><div class="step-num">02</div><h3>We match your profile</h3><p>Our logic weighs career stage, target outcome, format, prestige, and program strengths — not just rankings.</p></div>
-      <div class="step"><div class="step-num">03</div><h3>Receive your short list</h3><p>Up to 5 programs with a clear explanation of why each one fits your specific profile.</p></div>
+  <div class="features">
+    <div class="section-label">Built for senior leaders</div>
+    <div class="feature-grid">
+      <div class="feature-card"><div class="feature-title">Executive-specific</div><div class="feature-desc">12 questions designed for senior professionals, not recent graduates.</div></div>
+      <div class="feature-card"><div class="feature-title">Global coverage</div><div class="feature-desc">US, European, Asian, and joint international programs including TRIUM, UCLA-NUS, and IE Brown.</div></div>
+      <div class="feature-card"><div class="feature-title">Format-first matching</div><div class="feature-desc">We match on how you live and work — alternate weekends, modular, global residencies, or blended.</div></div>
     </div>
   </div>
   <div class="bottom-cta">
-    <h2>Most people are overwhelmed by options.</h2>
-    <p>This tool cuts through the noise. Built using insights from working with leading business schools and applicants.</p>
-    <button class="cta light" onclick="startSurvey()">Start the Survey →</button>
+    <h2>Most EMBA tools are built for full-time MBA candidates.</h2>
+    <p>This one is built for you — a senior professional with a career, responsibilities, and a very specific set of needs.</p>
+    <button class="cta cta-gold" onclick="startSurvey()">Start the Survey →</button>
   </div>
 </div>
 
-<!-- SURVEY -->
 <div id="survey">
   <div class="back-bar" onclick="showLanding()">← Back</div>
   <div class="survey-inner">
     <div class="progress-label" id="prog-label">Step 1 of 13</div>
     <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:7%"></div></div>
-
-    <!-- Q1 -->
     <div class="q-step active" id="q1">
       <div class="q-label">How many years of professional experience do you have?</div>
-      <div class="q-sub">Include full-time work only.</div>
-      <div class="options" id="o1">
-        <div class="opt" onclick="pick('experience','0-2',this)"><div class="opt-dot"></div>0 – 2 years</div>
-        <div class="opt" onclick="pick('experience','3-5',this)"><div class="opt-dot"></div>3 – 5 years</div>
-        <div class="opt" onclick="pick('experience','6-10',this)"><div class="opt-dot"></div>6 – 10 years</div>
-        <div class="opt" onclick="pick('experience','10+',this)"><div class="opt-dot"></div>10+ years</div>
+      <div class="q-sub">EMBA programs are designed for experienced leaders.</div>
+      <div class="options">
+        <div class="opt" onclick="pick('experience','8-15',this)"><div class="opt-dot"></div>8 – 15 years</div>
+        <div class="opt" onclick="pick('experience','10-15',this)"><div class="opt-dot"></div>10 – 15 years</div>
+        <div class="opt" onclick="pick('experience','15-20',this)"><div class="opt-dot"></div>15 – 20 years</div>
+        <div class="opt" onclick="pick('experience','20+',this)"><div class="opt-dot"></div>20+ years</div>
       </div>
       <div class="nav-btns"><button class="btn-next" id="n1" onclick="next(1)" disabled>Continue</button></div>
     </div>
-
-    <!-- Q2 -->
     <div class="q-step" id="q2">
       <div class="q-label">What best describes your current career level?</div>
-      <div class="q-sub">This helps us match you with the right program tier.</div>
-      <div class="options" id="o2">
-        <div class="opt" onclick="pick('level','individual',this)"><div class="opt-dot"></div>Individual contributor / analyst</div>
-        <div class="opt" onclick="pick('level','manager',this)"><div class="opt-dot"></div>Manager / team lead</div>
-        <div class="opt" onclick="pick('level','director',this)"><div class="opt-dot"></div>Director / VP</div>
-        <div class="opt" onclick="pick('level','executive',this)"><div class="opt-dot"></div>C-suite / executive</div>
+      <div class="q-sub">Be specific — this is the most important factor in EMBA matching.</div>
+      <div class="options">
+        <div class="opt" onclick="pick('stage','mid-senior',this)"><div class="opt-dot"></div>Director / Senior Director</div>
+        <div class="opt" onclick="pick('stage','senior',this)"><div class="opt-dot"></div>VP / SVP / Managing Director</div>
+        <div class="opt" onclick="pick('stage','very-senior',this)"><div class="opt-dot"></div>C-Suite (CEO, CFO, COO, CTO, etc.)</div>
+        <div class="opt" onclick="pick('stage','founder',this)"><div class="opt-dot"></div>Founder / Owner / Entrepreneur</div>
       </div>
       <div class="nav-btns"><button class="btn-back" onclick="prev(2)">Back</button><button class="btn-next" id="n2" onclick="next(2)" disabled>Continue</button></div>
     </div>
-
-    <!-- Q3 -->
     <div class="q-step" id="q3">
       <div class="q-label">What industry are you currently working in?</div>
       <div class="q-sub">Select the closest match.</div>
-      <div class="options" id="o3">
-        <div class="opt" onclick="pick('industry','finance',this)"><div class="opt-dot"></div>Finance / banking / investment</div>
+      <div class="options">
+        <div class="opt" onclick="pick('industry','finance',this)"><div class="opt-dot"></div>Finance / banking / investment / PE</div>
         <div class="opt" onclick="pick('industry','tech',this)"><div class="opt-dot"></div>Technology / software</div>
         <div class="opt" onclick="pick('industry','consulting',this)"><div class="opt-dot"></div>Consulting / professional services</div>
-        <div class="opt" onclick="pick('industry','healthcare',this)"><div class="opt-dot"></div>Healthcare / life sciences</div>
+        <div class="opt" onclick="pick('industry','healthcare',this)"><div class="opt-dot"></div>Healthcare / life sciences / pharma</div>
         <div class="opt" onclick="pick('industry','consumer',this)"><div class="opt-dot"></div>Consumer goods / retail</div>
         <div class="opt" onclick="pick('industry','media',this)"><div class="opt-dot"></div>Media / entertainment</div>
+        <div class="opt" onclick="pick('industry','energy',this)"><div class="opt-dot"></div>Energy / industrials</div>
         <div class="opt" onclick="pick('industry','real-estate',this)"><div class="opt-dot"></div>Real estate</div>
         <div class="opt" onclick="pick('industry','nonprofit',this)"><div class="opt-dot"></div>Nonprofit / government</div>
         <div class="opt" onclick="pick('industry','general',this)"><div class="opt-dot"></div>Other / general</div>
       </div>
       <div class="nav-btns"><button class="btn-back" onclick="prev(3)">Back</button><button class="btn-next" id="n3" onclick="next(3)" disabled>Continue</button></div>
     </div>
-
-    <!-- Q4 -->
     <div class="q-step" id="q4">
-      <div class="q-label">What's your primary reason for pursuing a business program?</div>
+      <div class="q-label">What is driving your interest in an Executive MBA right now?</div>
       <div class="q-sub">Choose up to two.</div>
-      <div class="options multi" id="o4">
-        <div class="opt" onclick="pickMulti('goals','career-advance',this,2)"><div class="opt-dot"></div>Career advancement in my current field</div>
-        <div class="opt" onclick="pickMulti('goals','career-switch',this,2)"><div class="opt-dot"></div>Switching to a new industry or role</div>
-        <div class="opt" onclick="pickMulti('goals','entrepreneurship',this,2)"><div class="opt-dot"></div>Starting or growing a business</div>
-        <div class="opt" onclick="pickMulti('goals','network',this,2)"><div class="opt-dot"></div>Building a high-quality network</div>
-        <div class="opt" onclick="pickMulti('goals','skills',this,2)"><div class="opt-dot"></div>Specific skill development</div>
-        <div class="opt" onclick="pickMulti('goals','leadership',this,2)"><div class="opt-dot"></div>Becoming a senior leader</div>
-        <div class="opt" onclick="pickMulti('goals','international',this,2)"><div class="opt-dot"></div>International career or exposure</div>
+      <div class="options multi">
+        <div class="opt" onclick="pickMulti('driver','level-up',this,2)"><div class="opt-dot"></div>Level up within my current company</div>
+        <div class="opt" onclick="pickMulti('driver','pivot',this,2)"><div class="opt-dot"></div>Pivot to a new industry or function</div>
+        <div class="opt" onclick="pickMulti('driver','senior-role',this,2)"><div class="opt-dot"></div>Transition into a more senior executive role</div>
+        <div class="opt" onclick="pickMulti('driver','venture',this,2)"><div class="opt-dot"></div>Launch or grow a venture</div>
+        <div class="opt" onclick="pickMulti('driver','network',this,2)"><div class="opt-dot"></div>Build a world-class global network</div>
+        <div class="opt" onclick="pickMulti('driver','reinvention',this,2)"><div class="opt-dot"></div>Personal reinvention or milestone</div>
       </div>
       <div class="nav-btns"><button class="btn-back" onclick="prev(4)">Back</button><button class="btn-next" id="n4" onclick="next(4)" disabled>Continue</button></div>
     </div>
-
-    <!-- Q5 -->
     <div class="q-step" id="q5">
-      <div class="q-label">What career outcome are you targeting after the program?</div>
-      <div class="q-sub">Choose the closest fit.</div>
-      <div class="options" id="o5">
+      <div class="q-label">What outcome matters most to you after the program?</div>
+      <div class="q-sub">Choose the one that best describes your goal.</div>
+      <div class="options">
+        <div class="opt" onclick="pick('outcome','general-management',this)"><div class="opt-dot"></div>Senior leadership / general management</div>
         <div class="opt" onclick="pick('outcome','consulting',this)"><div class="opt-dot"></div>Management consulting</div>
-        <div class="opt" onclick="pick('outcome','finance',this)"><div class="opt-dot"></div>Finance / investment banking / PE</div>
-        <div class="opt" onclick="pick('outcome','tech',this)"><div class="opt-dot"></div>Tech (product, strategy, or operations)</div>
-        <div class="opt" onclick="pick('outcome','entrepreneurship',this)"><div class="opt-dot"></div>Start or scale a business</div>
-        <div class="opt" onclick="pick('outcome','general-management',this)"><div class="opt-dot"></div>General management / leadership</div>
-        <div class="opt" onclick="pick('outcome','healthcare',this)"><div class="opt-dot"></div>Healthcare management</div>
+        <div class="opt" onclick="pick('outcome','finance',this)"><div class="opt-dot"></div>Finance / investment / private equity</div>
+        <div class="opt" onclick="pick('outcome','tech',this)"><div class="opt-dot"></div>Tech leadership (product, strategy, or operations)</div>
+        <div class="opt" onclick="pick('outcome','entrepreneurship',this)"><div class="opt-dot"></div>Start or scale a venture</div>
+        <div class="opt" onclick="pick('outcome','healthcare',this)"><div class="opt-dot"></div>Healthcare leadership</div>
         <div class="opt" onclick="pick('outcome','nonprofit',this)"><div class="opt-dot"></div>Nonprofit / social impact / government</div>
-        <div class="opt" onclick="pick('outcome','marketing',this)"><div class="opt-dot"></div>Marketing / brand management</div>
       </div>
       <div class="nav-btns"><button class="btn-back" onclick="prev(5)">Back</button><button class="btn-next" id="n5" onclick="next(5)" disabled>Continue</button></div>
     </div>
-
-    <!-- Q6 -->
     <div class="q-step" id="q6">
-      <div class="q-label">What program format fits your life right now?</div>
-      <div class="q-sub">Be honest — this matters more than most people think.</div>
-      <div class="options" id="o6">
-        <div class="opt" onclick="pick('format','full-time',this)"><div class="opt-dot"></div>Full-time — I can leave work to attend</div>
-        <div class="opt" onclick="pick('format','part-time',this)"><div class="opt-dot"></div>Part-time / Evening — I need to keep working</div>
-        <div class="opt" onclick="pick('format','online',this)"><div class="opt-dot"></div>Online — fully remote preferred</div>
-        <div class="opt" onclick="pick('format','executive',this)"><div class="opt-dot"></div>Executive / EMBA — weekend or modular format</div>
+      <div class="q-label">What program format works for your life?</div>
+      <div class="q-sub">Be realistic — format fit is critical for completion.</div>
+      <div class="options">
+        <div class="opt" onclick="pick('format','alternate-weekend',this)"><div class="opt-dot"></div>Alternate weekends — every other Friday and Saturday</div>
+        <div class="opt" onclick="pick('format','modular',this)"><div class="opt-dot"></div>Modular / intensive — concentrated blocks of time</div>
+        <div class="opt" onclick="pick('format','global-residencies',this)"><div class="opt-dot"></div>Global residencies — I can travel internationally for modules</div>
+        <div class="opt" onclick="pick('format','blended',this)"><div class="opt-dot"></div>Blended / online-first — I need maximum flexibility</div>
+        <div class="opt" onclick="pick('format','hybrid',this)"><div class="opt-dot"></div>Hybrid — mix of in-person and remote</div>
       </div>
       <div class="nav-btns"><button class="btn-back" onclick="prev(6)">Back</button><button class="btn-next" id="n6" onclick="next(6)" disabled>Continue</button></div>
     </div>
-
-    <!-- Q7 -->
     <div class="q-step" id="q7">
       <div class="q-label">Where would you prefer to study?</div>
-      <div class="q-sub">Select your preferred region.</div>
-      <div class="options" id="o7">
+      <div class="q-sub">Select your preferred location or flexibility.</div>
+      <div class="options">
         <div class="opt" onclick="pick('geo','northeast',this)"><div class="opt-dot"></div>Northeast US (NY, Boston, DC)</div>
-        <div class="opt" onclick="pick('geo','west',this)"><div class="opt-dot"></div>West Coast US (LA, Bay Area, Seattle)</div>
+        <div class="opt" onclick="pick('geo','west',this)"><div class="opt-dot"></div>West Coast US (LA, Bay Area)</div>
         <div class="opt" onclick="pick('geo','midwest',this)"><div class="opt-dot"></div>Midwest US (Chicago, Michigan)</div>
         <div class="opt" onclick="pick('geo','south',this)"><div class="opt-dot"></div>South / Southeast US</div>
-        <div class="opt" onclick="pick('geo','international',this)"><div class="opt-dot"></div>International (Europe, Asia, etc.)</div>
-        <div class="opt" onclick="pick('geo','flexible',this)"><div class="opt-dot"></div>Flexible — open to any location</div>
+        <div class="opt" onclick="pick('geo','international',this)"><div class="opt-dot"></div>Europe, Asia, or other international</div>
+        <div class="opt" onclick="pick('geo','flexible',this)"><div class="opt-dot"></div>Flexible — open to any location or global travel</div>
       </div>
       <div class="nav-btns"><button class="btn-back" onclick="prev(7)">Back</button><button class="btn-next" id="n7" onclick="next(7)" disabled>Continue</button></div>
     </div>
-
-    <!-- Q8 -->
     <div class="q-step" id="q8">
-      <div class="q-label">How important is program prestige or ranking?</div>
-      <div class="q-sub">There's no wrong answer — it depends on your industry and goals.</div>
-      <div class="options" id="o8">
-        <div class="opt" onclick="pick('prestige','high',this)"><div class="opt-dot"></div>Very important — I want a top-tier name</div>
-        <div class="opt" onclick="pick('prestige','medium',this)"><div class="opt-dot"></div>Somewhat — quality matters more than rank</div>
-        <div class="opt" onclick="pick('prestige','low',this)"><div class="opt-dot"></div>Not critical — fit and value matter most</div>
+      <div class="q-label">How important is global exposure and an international cohort?</div>
+      <div class="q-sub">Some programs are primarily domestic; others are deeply global.</div>
+      <div class="options">
+        <div class="opt" onclick="pick('global','essential',this)"><div class="opt-dot"></div>Essential — I need genuine international exposure</div>
+        <div class="opt" onclick="pick('global','important',this)"><div class="opt-dot"></div>Important but not the deciding factor</div>
+        <div class="opt" onclick="pick('global','nice',this)"><div class="opt-dot"></div>Nice to have but not a priority</div>
+        <div class="opt" onclick="pick('global','not-important',this)"><div class="opt-dot"></div>Not important — I prefer a domestic focus</div>
       </div>
       <div class="nav-btns"><button class="btn-back" onclick="prev(8)">Back</button><button class="btn-next" id="n8" onclick="next(8)" disabled>Continue</button></div>
     </div>
-
-    <!-- Q9 -->
     <div class="q-step" id="q9">
-      <div class="q-label">What's your budget sensitivity for program cost?</div>
-      <div class="q-sub">Total program costs range from ~$30K to $200K+.</div>
-      <div class="options" id="o9">
-        <div class="opt" onclick="pick('budget','any',this)"><div class="opt-dot"></div>Cost is not a major factor</div>
-        <div class="opt" onclick="pick('budget','high',this)"><div class="opt-dot"></div>I can invest heavily — ROI is what matters</div>
-        <div class="opt" onclick="pick('budget','medium',this)"><div class="opt-dot"></div>I'm somewhat cost-conscious</div>
-        <div class="opt" onclick="pick('budget','low',this)"><div class="opt-dot"></div>Cost is a significant factor in my decision</div>
+      <div class="q-label">Is your employer sponsoring or likely to sponsor your program?</div>
+      <div class="q-sub">Sponsorship affects which programs and formats make sense.</div>
+      <div class="options">
+        <div class="opt" onclick="pick('sponsored','full',this)"><div class="opt-dot"></div>Yes — fully sponsored by my employer</div>
+        <div class="opt" onclick="pick('sponsored','partial',this)"><div class="opt-dot"></div>Partially — employer will contribute</div>
+        <div class="opt" onclick="pick('sponsored','no',this)"><div class="opt-dot"></div>No — self-funded</div>
+        <div class="opt" onclick="pick('sponsored','unsure',this)"><div class="opt-dot"></div>Unsure — still exploring</div>
       </div>
       <div class="nav-btns"><button class="btn-back" onclick="prev(9)">Back</button><button class="btn-next" id="n9" onclick="next(9)" disabled>Continue</button></div>
     </div>
-
-    <!-- Q10 -->
     <div class="q-step" id="q10">
-      <div class="q-label">What was your undergraduate GPA?</div>
-      <div class="q-sub">Helps us highlight programs where your profile is competitive.</div>
-      <div class="options" id="o10">
-        <div class="opt" onclick="pick('gpa','3.7+',this)"><div class="opt-dot"></div>3.7 or above</div>
-        <div class="opt" onclick="pick('gpa','3.3-3.7',this)"><div class="opt-dot"></div>3.3 – 3.7</div>
-        <div class="opt" onclick="pick('gpa','3.0-3.3',this)"><div class="opt-dot"></div>3.0 – 3.3</div>
-        <div class="opt" onclick="pick('gpa','below-3',this)"><div class="opt-dot"></div>Below 3.0</div>
+      <div class="q-label">How important is program prestige and global brand?</div>
+      <div class="q-sub">An honest answer here leads to better matches.</div>
+      <div class="options">
+        <div class="opt" onclick="pick('prestige','critical',this)"><div class="opt-dot"></div>Critical — I want a globally recognized top-10 program</div>
+        <div class="opt" onclick="pick('prestige','important',this)"><div class="opt-dot"></div>Important — quality and reputation both matter</div>
+        <div class="opt" onclick="pick('prestige','moderate',this)"><div class="opt-dot"></div>Moderate — fit matters more than rankings</div>
+        <div class="opt" onclick="pick('prestige','low',this)"><div class="opt-dot"></div>Low — value and outcomes matter most</div>
       </div>
       <div class="nav-btns"><button class="btn-back" onclick="prev(10)">Back</button><button class="btn-next" id="n10" onclick="next(10)" disabled>Continue</button></div>
     </div>
-
-    <!-- Q11 -->
     <div class="q-step" id="q11">
-      <div class="q-label">What is your GMAT / GRE status?</div>
-      <div class="q-sub">Many programs are now test-optional.</div>
-      <div class="options" id="o11">
-        <div class="opt" onclick="pick('gmat','have',this)"><div class="opt-dot"></div>I have a score (700+ GMAT equivalent)</div>
-        <div class="opt" onclick="pick('gmat','planning',this)"><div class="opt-dot"></div>I plan to take it</div>
-        <div class="opt" onclick="pick('gmat','none',this)"><div class="opt-dot"></div>I'm not planning to take a standardized test</div>
+      <div class="q-label">What is your total budget for the program?</div>
+      <div class="q-sub">Including tuition, travel, and related costs.</div>
+      <div class="options">
+        <div class="opt" onclick="pick('budget','200k+',this)"><div class="opt-dot"></div>$200,000 or more</div>
+        <div class="opt" onclick="pick('budget','150-200k',this)"><div class="opt-dot"></div>$150,000 – $200,000</div>
+        <div class="opt" onclick="pick('budget','100-150k',this)"><div class="opt-dot"></div>$100,000 – $150,000</div>
+        <div class="opt" onclick="pick('budget','under-100k',this)"><div class="opt-dot"></div>Under $100,000</div>
       </div>
       <div class="nav-btns"><button class="btn-back" onclick="prev(11)">Back</button><button class="btn-next" id="n11" onclick="next(11)" disabled>Continue</button></div>
     </div>
-
-    <!-- Q12 -->
     <div class="q-step" id="q12">
-      <div class="q-label">When are you planning to apply?</div>
-      <div class="q-sub">Helps us highlight programs with upcoming deadlines.</div>
-      <div class="options" id="o12">
-        <div class="opt" onclick="pick('timeline','this-year',this)"><div class="opt-dot"></div>This application cycle (next 6 months)</div>
+      <div class="q-label">When are you planning to start your EMBA?</div>
+      <div class="q-sub">Most programs have annual intake in the fall.</div>
+      <div class="options">
+        <div class="opt" onclick="pick('timeline','this-year',this)"><div class="opt-dot"></div>This intake cycle (next 6 months)</div>
         <div class="opt" onclick="pick('timeline','1-2-years',this)"><div class="opt-dot"></div>1 – 2 years from now</div>
-        <div class="opt" onclick="pick('timeline','3+years',this)"><div class="opt-dot"></div>3 or more years out</div>
         <div class="opt" onclick="pick('timeline','exploring',this)"><div class="opt-dot"></div>Just exploring my options</div>
       </div>
       <div class="nav-btns"><button class="btn-back" onclick="prev(12)">Back</button><button class="btn-next" id="n12" onclick="next(12)" disabled>Continue</button></div>
     </div>
-
-    <!-- EMAIL -->
     <div class="q-step" id="q13">
       <div class="q-label">Almost there.</div>
-      <div class="q-sub">Enter your info to receive your personalized program recommendations.</div>
+      <div class="q-sub">Enter your info to receive your personalized EMBA recommendations.</div>
       <div class="field-group"><label class="field-label">First name</label><input class="field-input" id="fname" type="text" placeholder="Your first name" oninput="checkEmail()"></div>
       <div class="field-group"><label class="field-label">Email address</label><input class="field-input" id="femail" type="email" placeholder="you@example.com" oninput="checkEmail()"></div>
       <div class="consent-box">
         <input type="checkbox" id="consent" onchange="checkEmail()">
-        <div class="consent-text">By submitting, I agree to receive recommendations and information about programs that may be a good fit for my profile. I understand my information may be shared with business school programs that match my preferences.</div>
+        <div class="consent-text">By submitting, I agree to receive recommendations and information about EMBA programs that may be a good fit for my profile. I understand my information may be shared with matching business school programs.</div>
       </div>
       <div class="nav-btns"><button class="btn-back" onclick="prev(13)">Back</button><button class="btn-next" id="n13" onclick="showResults()" disabled>See My Recommendations</button></div>
     </div>
   </div>
 </div>
 
-<!-- RESULTS -->
 <div id="results">
   <div class="back-bar" onclick="resetAll()">← Start over</div>
   <div class="results-inner">
     <div class="results-eyebrow">Your Results</div>
-    <h2 id="results-headline">Your Best-Fit Programs</h2>
-    <p id="results-sub">Based on your profile, here are programs that align with your experience, target outcome, preferred format, and academic background.</p>
+    <h2 id="results-headline">Your Best-Fit EMBA Programs</h2>
+    <p class="results-intro">Based on your career stage, target outcome, format preference, and goals, here are the programs that align most closely with your profile.</p>
     <div id="cards"></div>
     <div class="results-cta-box">
-      <h3>Want to go deeper?</h3>
-      <p>We can connect you with admissions teams at programs that fit your profile, or provide a more detailed comparison. No obligation.</p>
-      <button class="cta light" onclick="alert('Thank you! We\'ll be in touch shortly.')">Request Introductions</button>
+      <h3>Want introductions or a deeper comparison?</h3>
+      <p>We can connect you directly with admissions teams at programs that fit your profile, or walk you through a side-by-side comparison.</p>
+      <button class="cta cta-gold" onclick="alert('Thank you! We\'ll be in touch shortly.')">Request Introductions</button>
     </div>
     <div class="disclaimer">AdmitFit is an independent matching tool. Recommendations are generated based on your self-reported profile and are intended to support — not replace — your own research. Program offerings, availability, and admissions requirements may change.</div>
   </div>
 </div>
 
 <script>
-const PROGRAMS = [
-  { name:"Harvard Business School", program:"Full-Time MBA", tier:1, formats:["full-time"], geo:["northeast","flexible","international"], experience:["3-5","6-10"], goals:["career-switch","network","career-advance","entrepreneurship"], industries:["consulting","finance","tech","healthcare","nonprofit","general"], outcomes:["consulting","finance","entrepreneurship","general-management","tech"], budget:["high","any"], gpa:["3.7+","3.3-3.7"], gmat:["have","planning"], level:["manager","director"], reasons:["Case method builds real-world decision-making across every business function","Largest and most powerful alumni network in business education — 943 students in the Class of 2027","Accepts both GMAT and GRE; median GMAT 685, avg GPA 3.76","~50% of students receive need-based scholarships averaging $100K over two years"] },
-  { name:"Wharton", program:"Full-Time MBA", tier:1, formats:["full-time"], geo:["northeast","flexible","international"], experience:["3-5","6-10"], goals:["career-switch","network","career-advance"], industries:["finance","consulting","tech","healthcare"], outcomes:["finance","consulting","tech","general-management"], budget:["high","any"], gpa:["3.7+","3.3-3.7"], gmat:["have","planning"], level:["manager","director"], reasons:["Globally recognized as the top finance MBA program","Deep consulting and tech placement with elite recruiting access","Finance curriculum is unmatched — ideal if finance is your target outcome","Strong quantitative rigor combined with breadth across all functions"] },
-  { name:"Wharton", program:"Executive MBA", tier:1, formats:["executive"], geo:["northeast","flexible","international"], experience:["6-10","10+"], goals:["career-advance","network","career-switch"], industries:["finance","consulting","tech","healthcare","general"], outcomes:["finance","consulting","general-management"], budget:["high","any"], gpa:["3.7+","3.3-3.7","3.0-3.3"], gmat:["have","planning","none"], level:["director","executive"], reasons:["Premier EMBA for senior professionals seeking global leadership roles","One of the most powerful alumni networks in the world","Weekend format preserves your professional trajectory","Strong placement across finance, consulting, and general management"] },
-  { name:"MIT Sloan", program:"Full-Time MBA", tier:1, formats:["full-time"], geo:["northeast","flexible","international"], experience:["3-5","6-10"], goals:["career-switch","skills","entrepreneurship","career-advance"], industries:["tech","finance","consulting","healthcare"], outcomes:["tech","consulting","entrepreneurship","finance"], budget:["high","any"], gpa:["3.7+","3.3-3.7"], gmat:["have","planning"], level:["manager","director"], reasons:["World-class for tech and innovation-driven careers","Action Learning Labs give hands-on experience with real companies","Deep ties to MIT's engineering and startup ecosystem","Strong placement in tech, consulting, and entrepreneurship"] },
-  { name:"MIT Sloan", program:"Executive MBA", tier:1, formats:["executive"], geo:["northeast","flexible","international"], experience:["10+"], goals:["career-advance","network","leadership"], industries:["tech","finance","consulting","healthcare","general","nonprofit"], outcomes:["general-management","tech","consulting","entrepreneurship"], budget:["high","any"], gpa:["3.7+","3.3-3.7","3.0-3.3"], gmat:["have","planning","none"], level:["director","executive"], reasons:["130 global executives per cohort — 76% are director-level or above","20-month Friday/Saturday format — 100% of students remain employed throughout","MIT Action Learning model means immediate impact in your organization","Access to MIT's 148,000+ alumni network and full Sloan ecosystem"] },
-  { name:"MIT Sloan Fellows", program:"Fellows MBA", tier:1, formats:["full-time"], geo:["northeast","flexible","international"], experience:["10+"], goals:["career-advance","leadership","network","career-switch"], industries:["tech","finance","consulting","healthcare","general","nonprofit","government"], outcomes:["general-management","tech","consulting","nonprofit","entrepreneurship"], budget:["high","any"], gpa:["3.7+","3.3-3.7","3.0-3.3"], gmat:["have","planning","none"], level:["director","executive"], reasons:["One-year full-time program designed exclusively for senior leaders","Small cohort of 116 — extremely high faculty and peer access","Combines MIT rigor with a global, mission-driven leadership focus","Cross-registration across MIT and Harvard available"] },
-  { name:"Columbia Business School", program:"Full-Time MBA", tier:1, formats:["full-time"], geo:["northeast","flexible","international"], experience:["3-5","6-10"], goals:["career-switch","network","career-advance","entrepreneurship"], industries:["finance","consulting","tech","media","real-estate"], outcomes:["finance","consulting","entrepreneurship","tech"], budget:["high","any"], gpa:["3.7+","3.3-3.7"], gmat:["have","planning"], level:["manager","director"], reasons:["Located in NYC — unparalleled access to finance, media, and global business","CBS Value Investing program is world-class for finance careers","Strong entrepreneurship resources in the world's startup capital","Exceptional alumni network across Wall Street and international business"] },
-  { name:"Columbia Business School", program:"Executive MBA", tier:1, formats:["executive"], geo:["northeast","flexible","international"], experience:["6-10","10+"], goals:["career-advance","network","career-switch"], industries:["finance","consulting","tech","media","general"], outcomes:["finance","general-management","consulting"], budget:["high","any"], gpa:["3.7+","3.3-3.7","3.0-3.3"], gmat:["have","planning","none"], level:["director","executive"], reasons:["Weekend format designed for senior professionals in NYC and beyond","Exceptional alumni network with global reach","Strong placement across finance, consulting, and entrepreneurship","Access to Columbia's world-class faculty and NYC business ecosystem"] },
-  { name:"NYU Stern", program:"Full-Time MBA", tier:1, formats:["full-time"], geo:["northeast","flexible","international"], experience:["3-5","6-10"], goals:["career-switch","career-advance","network"], industries:["finance","tech","media","consulting","real-estate"], outcomes:["finance","tech","consulting","general-management"], budget:["high","any"], gpa:["3.7+","3.3-3.7"], gmat:["have","planning"], level:["manager","director"], reasons:["Top-ranked for finance and located in the heart of NYC","Strong placement in tech, media, and real estate alongside finance","Stern's network in financial services is among the deepest anywhere","Access to NYC's business ecosystem from day one"] },
-  { name:"NYU Stern", program:"Part-Time MBA", tier:1, formats:["part-time"], geo:["northeast"], experience:["3-5","6-10"], goals:["career-advance","career-switch","network"], industries:["finance","tech","media","consulting","real-estate"], outcomes:["finance","tech","consulting"], budget:["high","medium","any"], gpa:["3.7+","3.3-3.7","3.0-3.3"], gmat:["have","planning","none"], level:["individual","manager"], reasons:["Highly flexible structure for working professionals in the NY metro area","Top-ranked in finance and tech with strong NYC placement","Strong ROI for mid-career professionals who need to keep working","Access to the same faculty and network as the full-time program"] },
-  { name:"Kellogg", program:"Full-Time MBA", tier:1, formats:["full-time"], geo:["midwest","flexible","international"], experience:["3-5","6-10"], goals:["career-switch","career-advance","network","leadership"], industries:["consulting","finance","tech","healthcare","consumer"], outcomes:["consulting","general-management","marketing","tech"], budget:["high","any"], gpa:["3.7+","3.3-3.7"], gmat:["have","planning"], level:["manager","director"], reasons:["Globally ranked #1 for marketing and consistently top-5 overall","Collaborative culture produces exceptional team leaders","Deep consulting and general management placement","Strong healthcare and consumer goods networks"] },
-  { name:"Kellogg", program:"Executive MBA", tier:1, formats:["executive"], geo:["midwest","flexible","international"], experience:["6-10","10+"], goals:["career-advance","network","leadership"], industries:["consulting","finance","tech","healthcare","consumer","general"], outcomes:["consulting","general-management","marketing"], budget:["high","any"], gpa:["3.7+","3.3-3.7","3.0-3.3"], gmat:["have","planning","none"], level:["director","executive"], reasons:["Consistently ranked among the top EMBAs globally","Biweekly format minimizes career disruption while maximizing learning","World-class marketing and leadership curriculum","Tight-knit cohort that becomes a lifelong professional network"] },
-  { name:"Booth (UChicago)", program:"Full-Time MBA", tier:1, formats:["full-time"], geo:["midwest","flexible","international"], experience:["3-5","6-10"], goals:["career-switch","skills","entrepreneurship","career-advance"], industries:["finance","consulting","tech","healthcare"], outcomes:["finance","consulting","entrepreneurship","tech"], budget:["high","any"], gpa:["3.7+","3.3-3.7"], gmat:["have","planning"], level:["manager","director"], reasons:["Unmatched analytical rigor — best for careers in finance or consulting","Flexible curriculum with no required core — you build your own program","Polsky Center for Entrepreneurship is world-class","Nobel laureate faculty give access to cutting-edge economic thinking"] },
-  { name:"Stanford GSB", program:"Full-Time MBA", tier:1, formats:["full-time"], geo:["west","flexible","international"], experience:["3-5","6-10"], goals:["entrepreneurship","career-switch","leadership","career-advance"], industries:["tech","finance","consulting","nonprofit","healthcare"], outcomes:["entrepreneurship","tech","consulting","general-management","nonprofit"], budget:["high","any"], gpa:["3.7+"], gmat:["have"], level:["manager","director"], reasons:["Located in Silicon Valley — the epicenter of tech and entrepreneurship","Produces more founders and startup CEOs than any other MBA program","Smallest class size of top programs — extremely high per-student investment","Deep focus on leadership and self-development alongside business fundamentals"] },
-  { name:"Haas (UC Berkeley)", program:"Full-Time MBA", tier:1, formats:["full-time"], geo:["west","flexible","international"], experience:["3-5","6-10"], goals:["entrepreneurship","career-switch","career-advance","skills"], industries:["tech","consulting","finance","nonprofit","healthcare"], outcomes:["tech","entrepreneurship","consulting","general-management"], budget:["high","medium","any"], gpa:["3.7+","3.3-3.7"], gmat:["have","planning"], level:["manager","director"], reasons:["Deep ties to Bay Area tech and venture capital ecosystems","Strong culture of innovation and Defining Leadership Principles","Excellent value relative to peer programs","Exceptional placement in tech, sustainability, and social enterprise"] },
-  { name:"UCLA Anderson", program:"Fully Employed MBA", tier:1, formats:["part-time","executive"], geo:["west"], experience:["3-5","6-10"], goals:["career-advance","network","entrepreneurship"], industries:["tech","media","finance","consulting","healthcare"], outcomes:["tech","consulting","entrepreneurship","general-management"], budget:["high","medium","any"], gpa:["3.7+","3.3-3.7","3.0-3.3"], gmat:["have","planning","none"], level:["individual","manager","director"], reasons:["Designed for high-achieving professionals who want to stay in their careers","Deep ties to LA's tech, entertainment, and startup ecosystems","Strong ROI with minimal career interruption","Same Anderson degree and alumni network as the full-time program"] },
-  { name:"Georgetown McDonough", program:"Flex MBA", tier:2, formats:["part-time","online"], geo:["northeast","south","flexible"], experience:["3-5","6-10"], goals:["career-advance","career-switch","skills"], industries:["consulting","finance","nonprofit","government","healthcare","general"], outcomes:["consulting","finance","general-management","nonprofit"], budget:["high","medium","any"], gpa:["3.7+","3.3-3.7","3.0-3.3"], gmat:["have","planning","none"], level:["individual","manager","director"], reasons:["Blended online/in-person format offers maximum flexibility","Deep DC network in policy, consulting, and international business","Strong ethics-focused curriculum with a global perspective","Good for professionals who need to balance demanding work schedules"] },
-  { name:"Carnegie Mellon Tepper", program:"Part-Time / Online MBA", tier:2, formats:["part-time","online"], geo:["midwest","northeast","flexible"], experience:["3-5","6-10"], goals:["skills","career-switch","career-advance","entrepreneurship"], industries:["tech","finance","consulting","healthcare","general"], outcomes:["tech","consulting","finance","general-management"], budget:["high","medium","any"], gpa:["3.7+","3.3-3.7","3.0-3.3"], gmat:["have","planning","none"], level:["individual","manager","director"], reasons:["Top-ranked for technology and analytics-focused business education","Flexible hybrid format suits working professionals across locations","Strong placement in tech, consulting, and financial services","Same Tepper degree whether online or in-person"] },
-  { name:"Michigan Ross", program:"Full-Time MBA", tier:1, formats:["full-time"], geo:["midwest","flexible","international"], experience:["3-5","6-10"], goals:["career-switch","career-advance","leadership","entrepreneurship"], industries:["consulting","finance","tech","healthcare","consumer","general"], outcomes:["consulting","general-management","finance","tech","marketing"], budget:["high","medium","any"], gpa:["3.7+","3.3-3.7"], gmat:["have","planning"], level:["manager","director"], reasons:["Consistently top-10 MBA with exceptional consulting and finance placement","MAP experiential project is one of the best learning programs anywhere","Strong automotive, consumer goods, and healthcare networks","Collaborative culture with high team-based learning"] },
-  { name:"Fuqua (Duke)", program:"Full-Time MBA", tier:1, formats:["full-time"], geo:["south","flexible","international"], experience:["3-5","6-10"], goals:["career-switch","career-advance","leadership","network"], industries:["consulting","finance","healthcare","tech","nonprofit"], outcomes:["consulting","general-management","finance","healthcare","nonprofit"], budget:["high","medium","any"], gpa:["3.7+","3.3-3.7"], gmat:["have","planning"], level:["manager","director"], reasons:["Top healthcare and social enterprise programs in the country","Strong consulting and finance placement nationally and globally","Team Fuqua culture produces highly collaborative leaders","Growing tech and entrepreneurship programs with strong VC connections"] },
-  { name:"Yale SOM", program:"Full-Time MBA", tier:1, formats:["full-time"], geo:["northeast","flexible","international"], experience:["3-5","6-10"], goals:["career-switch","leadership","career-advance","nonprofit"], industries:["finance","nonprofit","consulting","healthcare","government"], outcomes:["finance","nonprofit","consulting","general-management","government"], budget:["high","any"], gpa:["3.7+","3.3-3.7"], gmat:["have","planning"], level:["manager","director"], reasons:["Best MBA for careers at the intersection of business and social impact","Top placement in nonprofit, government, and international organizations","Yale network is one of the most influential in the world","Strong finance and consulting placement alongside its social mission focus"] },
-  { name:"INSEAD", program:"Full-Time MBA", tier:1, formats:["full-time"], geo:["international","flexible"], experience:["3-5","6-10"], goals:["career-switch","network","career-advance","international"], industries:["consulting","finance","tech","general","healthcare"], outcomes:["consulting","finance","general-management","tech"], budget:["high","any"], gpa:["3.7+","3.3-3.7"], gmat:["have","planning"], level:["manager","director"], reasons:["The world's most international MBA — campuses in France, Singapore, and Abu Dhabi","Top global consulting placement, rivaling HBS and Wharton internationally","Intense one-year format minimizes time out of the workforce","Truly global alumni network spanning 170+ countries"] },
-  { name:"London Business School", program:"MBA", tier:1, formats:["full-time"], geo:["international","flexible"], experience:["3-5","6-10"], goals:["career-switch","network","career-advance","international"], industries:["finance","consulting","tech","general"], outcomes:["finance","consulting","general-management","tech"], budget:["high","any"], gpa:["3.7+","3.3-3.7"], gmat:["have","planning"], level:["manager","director"], reasons:["Premier MBA in Europe with exceptional finance and consulting placement","Located in London — gateway to European and global business","Flexible 15–21 month program length allows for summer internships","Deep ties to European PE, VC, and investment banking communities"] },
-  { name:"UNC Kenan-Flagler", program:"Online MBA", tier:2, formats:["online"], geo:["flexible","south"], experience:["3-5","6-10","10+"], goals:["career-advance","skills","career-switch"], industries:["finance","consulting","tech","healthcare","general"], outcomes:["consulting","finance","general-management","tech"], budget:["medium","low","any"], gpa:["3.7+","3.3-3.7","3.0-3.3","below-3"], gmat:["have","planning","none"], level:["individual","manager","director"], reasons:["One of the top-ranked fully online MBA programs available","Strong brand value without the cost of a residential program","Asynchronous format accommodates demanding schedules in any time zone","Respected alumni network across finance, consulting, and tech"] },
-  { name:"Indiana Kelley", program:"Online MBA", tier:3, formats:["online"], geo:["flexible","midwest"], experience:["0-2","3-5"], goals:["skills","career-advance","career-switch"], industries:["finance","consulting","tech","general","healthcare"], outcomes:["finance","consulting","general-management","tech"], budget:["medium","low","any"], gpa:["3.7+","3.3-3.7","3.0-3.3","below-3"], gmat:["have","planning","none"], level:["individual","manager"], reasons:["Consistently ranked #1 or #2 online MBA in the US","Strong value proposition with a nationally respected name","Ideal for early-to-mid career professionals building core business skills","Flexible asynchronous format fits around demanding work schedules"] },
-  { name:"University of Illinois Gies", program:"iMBA (Online)", tier:3, formats:["online"], geo:["flexible","midwest"], experience:["0-2","3-5","6-10"], goals:["skills","career-advance","career-switch"], industries:["finance","tech","consulting","general","healthcare"], outcomes:["general-management","finance","tech","consulting"], budget:["low","medium","any"], gpa:["3.7+","3.3-3.7","3.0-3.3","below-3"], gmat:["have","planning","none"], level:["individual","manager"], reasons:["One of the most affordable accredited MBA programs in the country","Strong value proposition from a top-50 public university","Pioneering online format — highly accessible from anywhere","Ideal for cost-conscious professionals who want a credible degree"] },
-];
+const PROGRAMS=[{id:"wharton_emba",school:"Wharton",name:"Executive MBA",type:"EMBA",region:"US",geo:["northeast","flexible"],format:["alternate-weekend"],experience:["10-15","15-20","20+"],stage:["senior","very-senior"],strengths:["finance","consulting","general-management","network"],prestige:"global_top10",global:false,sponsored:true,outcomes:["finance","consulting","general-management"],industries:["finance","consulting","tech","healthcare","general"],budget:["200k+","150-200k"],reasons:["Consistently ranked the #1 EMBA program in the US by Poets & Quants","Two-campus format across Philadelphia and San Francisco expands your network coast to coast","Unmatched placement in finance, consulting, and general management","Ideal for senior leaders targeting the highest level of executive advancement"]},{id:"kellogg_emba",school:"Kellogg (Northwestern)",name:"Executive MBA",type:"EMBA",region:"US",geo:["midwest","flexible"],format:["alternate-weekend","modular"],experience:["10-15","15-20","20+"],stage:["senior","very-senior"],strengths:["leadership","marketing","general-management","network"],prestige:"global_top10",global:false,sponsored:true,outcomes:["general-management","consulting","marketing"],industries:["consulting","finance","tech","healthcare","consumer","general"],budget:["200k+","150-200k"],reasons:["World-class leadership and marketing curriculum — ranked #1 globally for marketing","Biweekly format minimizes disruption while maximizing learning depth","Tight-knit cohort becomes a lifelong professional network","Strong placement in general management, consulting, and consumer industries"]},{id:"booth_emba",school:"Booth (UChicago)",name:"Executive MBA",type:"EMBA",region:"US",geo:["midwest","flexible","international"],format:["modular"],experience:["10-15","15-20","20+"],stage:["senior","very-senior"],strengths:["finance","analytics","general-management","global"],prestige:"global_top10",global:true,sponsored:true,outcomes:["finance","consulting","general-management"],industries:["finance","consulting","tech","healthcare","general"],budget:["200k+","150-200k"],reasons:["Unmatched analytical rigor — the gold standard for finance and data-driven leaders","Global campus options in London and Hong Kong expand your international footprint","Flexible curriculum with no required core — you design your own focus","Nobel laureate faculty give access to cutting-edge economic and strategic thinking"]},{id:"columbia_emba",school:"Columbia Business School",name:"Executive MBA",type:"EMBA",region:"US",geo:["northeast","flexible"],format:["alternate-weekend"],experience:["8-15","10-15"],stage:["mid-senior","senior"],strengths:["finance","consulting","network","NYC"],prestige:"global_top10",global:false,sponsored:true,outcomes:["finance","consulting","general-management"],industries:["finance","consulting","tech","media","real-estate","general"],budget:["200k+","150-200k"],reasons:["Located in NYC — unparalleled access to finance, media, and global business","Weekend format designed for senior professionals who cannot leave their roles","Exceptional alumni network across Wall Street and international business","Strong placement in finance, consulting, and entrepreneurship"]},{id:"mit_sloan_emba",school:"MIT Sloan",name:"Executive MBA",type:"EMBA",region:"US",geo:["northeast","flexible","international"],format:["modular"],experience:["10-15","15-20","20+"],stage:["senior","very-senior"],strengths:["tech","innovation","analytics","action-learning"],prestige:"global_top10",global:false,sponsored:true,outcomes:["general-management","tech","consulting","entrepreneurship"],industries:["tech","finance","consulting","healthcare","general","nonprofit"],budget:["200k+","150-200k"],reasons:["130 global executives per cohort — 76% are director-level or above","100% of students remain employed throughout the 20-month Friday/Saturday program","MIT Action Learning model creates immediate impact in your organization","Access to MIT's 148,000+ alumni network, CSAIL, Media Lab, and full Sloan ecosystem"]},{id:"stern_emba",school:"NYU Stern",name:"Executive MBA",type:"EMBA",region:"US",geo:["northeast"],format:["alternate-weekend"],experience:["8-15","10-15"],stage:["mid-senior","senior"],strengths:["finance","strategy","network","NYC"],prestige:"global_top25",global:false,sponsored:false,outcomes:["finance","consulting","general-management"],industries:["finance","tech","media","consulting","real-estate"],budget:["150-200k","100-150k"],reasons:["Weekend format across NYC and DC campuses — ideal for Northeast professionals","Top-ranked in finance with deep Wall Street and media industry connections","Access to NYU's global network and NYC's unparalleled business ecosystem","Strong ROI for mid-to-senior professionals targeting finance and strategy roles"]},{id:"ross_emba",school:"Michigan Ross",name:"Executive MBA",type:"EMBA",region:"US",geo:["midwest","flexible"],format:["alternate-weekend"],experience:["10-15","15-20"],stage:["senior","very-senior"],strengths:["leadership","operations","general-management"],prestige:"global_top25",global:false,sponsored:true,outcomes:["general-management","consulting","operations"],industries:["consulting","finance","tech","healthcare","consumer","general"],budget:["150-200k","100-150k"],reasons:["Consistently top-ranked EMBA with exceptional leadership and operations focus","Strong automotive, consumer goods, and healthcare networks in the Midwest","Collaborative cohort culture that carries through your entire career","Excellent value relative to coastal peer programs"]},{id:"haas_emba",school:"Haas (UC Berkeley)",name:"Executive MBA",type:"EMBA",region:"US",geo:["west","flexible"],format:["alternate-weekend"],experience:["10-15","15-20"],stage:["senior","very-senior"],strengths:["tech","entrepreneurship","innovation","Bay-Area"],prestige:"global_top25",global:false,sponsored:true,outcomes:["tech","entrepreneurship","general-management"],industries:["tech","consulting","finance","healthcare","general"],budget:["150-200k","100-150k"],reasons:["Deep ties to Silicon Valley's tech and venture capital ecosystems","Strong Defining Leadership Principles culture — produces innovative, principled executives","Ideal for senior leaders targeting tech, innovation, or entrepreneurship outcomes","Excellent value relative to East Coast peer programs"]},{id:"yale_som_emba",school:"Yale SOM",name:"Executive MBA",type:"EMBA",region:"US",geo:["northeast","flexible"],format:["alternate-weekend"],experience:["8-15","10-15"],stage:["mid-senior","senior"],strengths:["healthcare","sustainability","mission-driven","asset-management"],prestige:"global_top25",global:false,sponsored:false,outcomes:["general-management","healthcare","nonprofit","finance"],industries:["finance","nonprofit","consulting","healthcare","government"],budget:["150-200k","100-150k"],reasons:["Best EMBA for leaders at the intersection of business and social impact","Top placement in healthcare management, sustainability, and asset management","Yale's network is one of the most influential in the world across sectors","Weekend format with integrated focus areas allows deep specialization"]},{id:"fuqua_gemba",school:"Fuqua (Duke)",name:"Global Executive MBA",type:"Global EMBA",region:"US",geo:["south","flexible","international"],format:["modular","global-residencies"],experience:["10-15","15-20"],stage:["senior","very-senior"],strengths:["global-leadership","healthcare","teamwork"],prestige:"global_top25",global:true,sponsored:true,outcomes:["general-management","consulting","healthcare"],industries:["consulting","finance","healthcare","tech","nonprofit"],budget:["150-200k","100-150k"],reasons:["Global residency format builds cross-cultural leadership skills in real markets","Top-ranked healthcare MBA — ideal if healthcare is your target sector","Team Fuqua culture produces uniquely collaborative senior leaders","Strong global alumni network across 90+ countries"]},{id:"ucla_anderson_emba",school:"UCLA Anderson",name:"Executive MBA",type:"EMBA",region:"US",geo:["west","flexible"],format:["alternate-weekend"],experience:["8-15","10-15"],stage:["mid-senior","senior"],strengths:["media","tech","entrepreneurship","LA-network"],prestige:"global_top25",global:false,sponsored:false,outcomes:["tech","entrepreneurship","general-management","consulting"],industries:["tech","media","finance","consulting","healthcare","real-estate"],budget:["150-200k","100-150k"],reasons:["Deep ties to LA's entertainment, tech, and real estate industries","Strong entrepreneurship program via the Price Center","Weekend format designed for working executives in Southern California","Same Anderson degree and alumni network as the full-time program"]},{id:"cornell_johnson_emba",school:"Cornell Johnson",name:"Executive MBA",type:"EMBA",region:"US",geo:["northeast","flexible"],format:["alternate-weekend","hybrid"],experience:["8-15","10-15"],stage:["mid-senior","senior"],strengths:["general-management","NYC-access","hybrid-flexibility"],prestige:"global_top25",global:false,sponsored:false,outcomes:["general-management","consulting","finance"],industries:["consulting","finance","tech","healthcare","general"],budget:["150-200k","100-150k"],reasons:["Metro-NY format gives access to NYC business ecosystem with Ithaca residential depth","Hybrid flexibility accommodates demanding executive schedules","Strong general management and leadership curriculum","Cornell's network spans industries from finance to agriculture to tech"]},{id:"mccombs_emba",school:"McCombs (UT Austin)",name:"Executive MBA",type:"EMBA",region:"US",geo:["south","flexible"],format:["alternate-weekend"],experience:["10-15","15-20"],stage:["senior","very-senior"],strengths:["energy","tech","entrepreneurship","Texas-network"],prestige:"strong_regional",global:false,sponsored:true,outcomes:["general-management","entrepreneurship","tech"],industries:["energy","tech","finance","consulting","general"],budget:["100-150k","under-100k"],reasons:["Top EMBA in Texas with exceptional energy, tech, and entrepreneurship networks","Excellent value — consistently ranked top 25 globally at a fraction of the cost","Strong placement in Texas's booming tech and energy sectors","Alternate-weekend format designed for busy senior executives"]},{id:"goizueta_emba",school:"Emory Goizueta",name:"Executive MBA",type:"EMBA",region:"US",geo:["south","flexible"],format:["alternate-weekend"],experience:["8-15","10-15"],stage:["mid-senior","senior"],strengths:["healthcare","consulting","leadership","Southeast"],prestige:"strong_regional",global:false,sponsored:false,outcomes:["healthcare","consulting","general-management"],industries:["healthcare","consulting","finance","tech","consumer"],budget:["100-150k","under-100k"],reasons:["Top EMBA in the Southeast with exceptional healthcare industry connections","Atlanta's corporate base provides strong recruiting in consulting and consumer goods","Small cohort means deep faculty relationships and a tight alumni network","Excellent value for a top-tier program in the Southeast"]},{id:"georgetown_emba",school:"Georgetown McDonough",name:"Executive MBA",type:"EMBA",region:"US",geo:["northeast","south","flexible"],format:["alternate-weekend"],experience:["8-15","10-15"],stage:["mid-senior","senior"],strengths:["policy","international-business","leadership","DC-network"],prestige:"strong_regional",global:false,sponsored:false,outcomes:["general-management","consulting","nonprofit","government"],industries:["consulting","finance","nonprofit","government","healthcare","general"],budget:["100-150k","under-100k"],reasons:["Deepest DC network in business education — ideal for policy-adjacent careers","Strong placement in consulting, government, and international organizations","Ethics-focused curriculum with a genuinely global perspective","Weekend format for senior professionals in the Washington metro area"]},{id:"tepper_emba",school:"Carnegie Mellon Tepper",name:"Executive MBA",type:"EMBA",region:"US",geo:["midwest","northeast","flexible"],format:["hybrid","modular"],experience:["8-15","10-15"],stage:["mid-senior","senior"],strengths:["analytics","tech","operations"],prestige:"strong_regional",global:false,sponsored:false,outcomes:["tech","consulting","general-management"],industries:["tech","finance","consulting","healthcare","general"],budget:["100-150k","under-100k"],reasons:["Top-ranked for technology and analytics-focused executive education","Hybrid format suits working executives across multiple locations","Strong placement in tech companies, consulting, and financial services","CMU's engineering DNA makes this ideal for tech-sector executives"]},{id:"insead_gemba",school:"INSEAD",name:"Global Executive MBA",type:"Global EMBA",region:"Global",geo:["international","flexible"],format:["modular","global-residencies"],experience:["10-15","15-20","20+"],stage:["senior","very-senior"],strengths:["consulting","entrepreneurship","global-mobility","international-cohort"],prestige:"global_top10",global:true,sponsored:true,outcomes:["consulting","general-management","entrepreneurship"],industries:["consulting","finance","tech","general","healthcare"],budget:["200k+","150-200k"],reasons:["The world's most international EMBA — residencies across Europe, Asia, and the Middle East","Top global consulting placement rivaling Wharton and MIT internationally","Truly global alumni network spanning 170+ countries and every major industry","Ideal for executives whose careers require genuine cross-border leadership"]},{id:"lbs_emba",school:"London Business School",name:"Executive MBA",type:"EMBA",region:"Europe",geo:["international","flexible"],format:["alternate-weekend","modular"],experience:["8-15","10-15"],stage:["mid-senior","senior"],strengths:["finance","consulting","global-electives","London-network"],prestige:"global_top10",global:true,sponsored:true,outcomes:["finance","consulting","general-management"],industries:["finance","consulting","tech","general"],budget:["150-200k","100-150k"],reasons:["Premier EMBA in Europe with exceptional finance and consulting placement","Located in London — gateway to European, Middle Eastern, and global business","Weekend and modular format accommodates busy executive schedules","Deep ties to European PE, VC, and investment banking communities"]},{id:"hec_paris_emba",school:"HEC Paris",name:"Executive MBA",type:"EMBA",region:"Europe",geo:["international","flexible"],format:["modular"],experience:["8-15","10-15"],stage:["mid-senior","senior"],strengths:["strategy","leadership","Europe-network"],prestige:"global_top10",global:true,sponsored:false,outcomes:["general-management","consulting","finance"],industries:["consulting","finance","tech","general","healthcare"],budget:["100-150k","under-100k"],reasons:["Consistently ranked in the top 5 EMBA programs globally by QS and FT","Strong strategic leadership curriculum with a distinctly European perspective","Deep network across European corporations and multinationals","Excellent value relative to US and UK top-tier programs"]},{id:"iese_global_emba",school:"IESE Business School",name:"Global Executive MBA",type:"Global EMBA",region:"Global",geo:["international","flexible"],format:["modular","global-residencies"],experience:["10-15","15-20","20+"],stage:["senior","very-senior"],strengths:["leadership","general-management","global-modules"],prestige:"global_top25",global:true,sponsored:true,outcomes:["general-management","consulting","nonprofit"],industries:["consulting","finance","general","nonprofit","healthcare"],budget:["150-200k","100-150k"],reasons:["Top-ranked global EMBA with residencies across five continents","Strong ethics and leadership focus with Jesuit tradition","Excellent general management and cross-cultural leadership curriculum","Deep global alumni network with particular strength in Europe and Latin America"]},{id:"ie_global_emba",school:"IE Business School",name:"Global Executive MBA",type:"Global EMBA",region:"Europe",geo:["international","flexible"],format:["blended","modular"],experience:["8-15","10-15"],stage:["mid-senior","senior"],strengths:["entrepreneurship","digital-transformation","global-flexibility"],prestige:"global_top25",global:true,sponsored:false,outcomes:["entrepreneurship","tech","consulting","general-management"],industries:["tech","consulting","finance","general","media"],budget:["100-150k","under-100k"],reasons:["Top European EMBA for entrepreneurship, digital transformation, and innovation","Blended modular format offers exceptional flexibility for working executives","Strong ties to European and Latin American startup ecosystems","Highly international and diverse cohort from 50+ countries"]},{id:"oxford_said_emba",school:"Oxford Saïd",name:"Executive MBA",type:"EMBA",region:"Europe",geo:["international","flexible"],format:["modular"],experience:["8-15","10-15"],stage:["mid-senior","senior"],strengths:["global-brand","strategy","social-impact","leadership"],prestige:"global_top25",global:true,sponsored:false,outcomes:["general-management","consulting","nonprofit"],industries:["consulting","finance","general","nonprofit","tech"],budget:["150-200k","100-150k"],reasons:["Oxford's global brand opens doors in every country and industry","Strong strategy and social impact focus — ideal for mission-driven leaders","Modular format designed for executives who cannot interrupt their careers","Access to Oxford's extraordinary interdisciplinary academic ecosystem"]},{id:"cambridge_judge_gemba",school:"Cambridge Judge",name:"Global Executive MBA",type:"Global EMBA",region:"Europe",geo:["international","flexible"],format:["modular"],experience:["8-15","10-15"],stage:["mid-senior","senior"],strengths:["technology","entrepreneurship","Cambridge-ecosystem"],prestige:"global_top25",global:true,sponsored:false,outcomes:["tech","entrepreneurship","general-management"],industries:["tech","consulting","finance","general","healthcare"],budget:["150-200k","100-150k"],reasons:["Cambridge's global brand combined with a strong technology and innovation focus","Access to Cambridge's extraordinary research ecosystem and startup community","Modular format accommodates senior executive schedules","Strong placement in tech, consulting, and entrepreneurship globally"]},{id:"nus_emba",school:"NUS Business School",name:"Executive MBA",type:"EMBA",region:"Asia",geo:["international","flexible"],format:["modular"],experience:["10-15","15-20"],stage:["senior","very-senior"],strengths:["Asia-Pacific","finance","regional-leadership"],prestige:"global_top25",global:true,sponsored:true,outcomes:["general-management","finance","consulting"],industries:["finance","tech","consulting","healthcare","general"],budget:["100-150k","under-100k"],reasons:["Premier EMBA for executives targeting Asia-Pacific leadership roles","Deep connections across Singapore, Southeast Asia, and broader APAC markets","Modular format designed for senior executives across time zones","Strong government and institutional networks unique to Singapore's business hub"]},{id:"hkust_emba",school:"HKUST Business School",name:"Executive MBA",type:"EMBA",region:"Asia",geo:["international","flexible"],format:["modular"],experience:["10-15","15-20"],stage:["senior","very-senior"],strengths:["Asia-finance","China-exposure","regional-leadership"],prestige:"global_top25",global:true,sponsored:true,outcomes:["general-management","finance","consulting"],industries:["finance","tech","consulting","general","healthcare"],budget:["100-150k","under-100k"],reasons:["Top-ranked EMBA in Asia with exceptional China and Hong Kong business exposure","Strong ties to mainland China's corporate and government sectors","Ideal for executives whose careers involve significant Asia or China exposure","Modular format accommodates senior executive schedules across the region"]},{id:"esade_emba",school:"ESADE Business School",name:"Executive MBA",type:"EMBA",region:"Europe",geo:["international","flexible"],format:["alternate-weekend","modular"],experience:["8-15","10-15"],stage:["mid-senior","senior"],strengths:["consulting","entrepreneurship","Europe-network"],prestige:"global_top25",global:true,sponsored:false,outcomes:["consulting","entrepreneurship","general-management"],industries:["consulting","finance","tech","general","healthcare"],budget:["100-150k","under-100k"],reasons:["Top-ranked European EMBA with strong consulting and entrepreneurship placement","Weekend and modular format suits busy executive schedules","Deep network across European and Latin American corporations","Strong ethics and responsibility focus alongside business fundamentals"]},{id:"trium_global_emba",school:"TRIUM (HEC / LSE / NYU Stern)",name:"TRIUM Global EMBA",type:"Global EMBA",region:"Global",geo:["international","flexible"],format:["modular","global-residencies"],experience:["15-20","20+"],stage:["very-senior"],strengths:["global-strategy","geopolitics","finance","ultra-senior-cohort"],prestige:"global_top10",global:true,sponsored:true,outcomes:["general-management","finance","consulting"],industries:["finance","consulting","general","government","nonprofit"],budget:["200k+"],reasons:["The most prestigious joint EMBA in the world — HEC Paris, LSE, and NYU Stern combined","Designed exclusively for very senior executives with 15+ years of experience","Ultra-senior cohort means peer learning at the highest level of global business","Residencies across New York, London, Paris, San Francisco, and emerging markets"]},{id:"ucla_nus_emba",school:"UCLA Anderson / NUS",name:"UCLA-NUS Executive MBA",type:"Global EMBA",region:"Global",geo:["international","flexible","west"],format:["modular","global-residencies"],experience:["10-15","15-20"],stage:["senior","very-senior"],strengths:["US-Asia","cross-cultural-leadership","global-strategy"],prestige:"global_top10",global:true,sponsored:true,outcomes:["general-management","consulting","tech"],industries:["tech","finance","consulting","general","healthcare"],budget:["150-200k","100-150k"],reasons:["The definitive EMBA for executives bridging US and Asia-Pacific markets","Joint degree from two top-ranked programs on two continents","Modular format with residencies in LA, Singapore, and additional global locations","Ideal for executives whose careers require genuine US-Asia cross-cultural fluency"]},{id:"tsinghua_insead_emba",school:"Tsinghua / INSEAD",name:"Tsinghua-INSEAD EMBA",type:"Global EMBA",region:"Global",geo:["international","flexible"],format:["modular","global-residencies"],experience:["10-15","15-20","20+"],stage:["senior","very-senior"],strengths:["China-global-bridge","innovation","international-management"],prestige:"global_top10",global:true,sponsored:true,outcomes:["general-management","consulting","entrepreneurship"],industries:["tech","finance","consulting","general","healthcare"],budget:["150-200k","100-150k"],reasons:["The premier EMBA for executives bridging China and global markets","Joint degree combining Tsinghua's China depth with INSEAD's global reach","Modular format across China, Europe, and Asia minimizes career disruption","Ideal for executives who need genuine China-global business fluency"]},{id:"emba_global_americas_europe",school:"Columbia / London Business School",name:"EMBA-Global Americas & Europe",type:"Global EMBA",region:"Global",geo:["international","flexible","northeast"],format:["modular","global-residencies"],experience:["10-15","15-20"],stage:["senior","very-senior"],strengths:["finance","global-markets","New-York-London-networks"],prestige:"global_top25",global:true,sponsored:true,outcomes:["finance","consulting","general-management"],industries:["finance","consulting","tech","general"],budget:["200k+","150-200k"],reasons:["Joint degree from Columbia and London Business School — two of the world's top programs","Unrivaled access to both New York and London financial and business networks","Modular format across New York and London minimizes career disruption","Exceptional for executives targeting senior finance or global management roles"]},{id:"ie_brown_emba",school:"IE Business School / Brown University",name:"IE Brown Executive MBA",type:"Global EMBA",region:"Global",geo:["international","flexible","northeast"],format:["blended","modular"],experience:["10-15","8-15"],stage:["mid-senior","senior"],strengths:["entrepreneurship","innovation","humanities-business","flexibility"],prestige:"global_top25",global:true,sponsored:false,outcomes:["entrepreneurship","general-management","tech","consulting"],industries:["tech","consulting","finance","general","media","nonprofit"],budget:["100-150k","under-100k"],reasons:["Unique joint program combining IE's business innovation with Brown's liberal arts depth","Blended modular format offers exceptional flexibility for working executives","Strong entrepreneurship and digital transformation focus","Ideal for executives who want to combine rigorous business training with humanistic leadership"]}];
 
-const answers = {};
-const multiAnswers = { goals: [] };
-let currentStep = 1;
-const TOTAL = 13;
+const answers={},multiAnswers={driver:[]};
+let currentStep=1;
+const TOTAL=13;
 
-function showLanding() {
-  document.getElementById('landing').style.display = 'block';
-  document.getElementById('survey').style.display = 'none';
-  document.getElementById('results').style.display = 'none';
-}
-
-function startSurvey() {
-  document.getElementById('landing').style.display = 'none';
-  document.getElementById('survey').style.display = 'block';
-  document.getElementById('results').style.display = 'none';
-  goTo(1);
-}
-
-function resetAll() {
-  Object.keys(answers).forEach(k => delete answers[k]);
-  multiAnswers.goals = [];
-  document.querySelectorAll('.opt').forEach(o => o.classList.remove('sel'));
-  document.getElementById('fname').value = '';
-  document.getElementById('femail').value = '';
-  document.getElementById('consent').checked = false;
-  for (let i = 1; i <= TOTAL; i++) {
-    const btn = document.getElementById('n' + i);
-    if (btn) btn.disabled = true;
-  }
-  showLanding();
-}
-
-function goTo(n) {
-  document.querySelectorAll('.q-step').forEach(s => s.classList.remove('active'));
-  document.getElementById('q' + n).classList.add('active');
-  currentStep = n;
-  const pct = Math.round((n / TOTAL) * 100);
-  document.getElementById('prog-fill').style.width = pct + '%';
-  document.getElementById('prog-label').textContent = 'Step ' + n + ' of ' + TOTAL;
-  window.scrollTo(0, 0);
-}
-
-function next(from) { if (from < TOTAL) goTo(from + 1); }
-function prev(from) { if (from > 1) goTo(from - 1); }
-
-function pick(key, val, el) {
-  answers[key] = val;
-  const parent = el.closest('.options');
-  parent.querySelectorAll('.opt').forEach(o => o.classList.remove('sel'));
-  el.classList.add('sel');
-  const stepNum = parseInt(el.closest('.q-step').id.replace('q', ''));
-  document.getElementById('n' + stepNum).disabled = false;
-}
-
-function pickMulti(key, val, el, max) {
-  const arr = multiAnswers[key];
-  const idx = arr.indexOf(val);
-  if (idx === -1) {
-    if (arr.length >= max) return;
-    arr.push(val);
-    el.classList.add('sel');
-  } else {
-    arr.splice(idx, 1);
-    el.classList.remove('sel');
-  }
-  answers[key] = arr;
-  const stepNum = parseInt(el.closest('.q-step').id.replace('q', ''));
-  document.getElementById('n' + stepNum).disabled = arr.length === 0;
-}
-
-function checkEmail() {
-  const name = document.getElementById('fname').value.trim();
-  const email = document.getElementById('femail').value.trim();
-  const consent = document.getElementById('consent').checked;
-  document.getElementById('n13').disabled = !(name && email.includes('@') && consent);
-}
-
-function scoreProgram(p, ans) {
-  let s = 0;
-  if (p.formats.includes(ans.format)) s += 35;
-  if (p.experience.includes(ans.experience)) s += 25;
-  if (p.geo.includes(ans.geo) || p.geo.includes('flexible') || ans.geo === 'flexible') s += 12;
-  (ans.goals || []).forEach(g => { if (p.goals.includes(g)) s += 8; });
-  if (p.outcomes && p.outcomes.includes(ans.outcome)) s += 15;
-  if (p.industries && p.industries.includes(ans.industry)) s += 8;
-  if (p.level && p.level.includes(ans.level)) s += 10;
-  if (p.gpa && p.gpa.includes(ans.gpa)) s += 5;
-  if (p.gmat && p.gmat.includes(ans.gmat)) s += 5;
-  if (ans.prestige === 'high' && p.tier > 1) s -= 20;
-  if (ans.prestige === 'low' && p.tier === 1) s -= 8;
-  if (ans.budget === 'low' && p.tier === 1) s -= 15;
-  if (p.geo.includes('international') && ans.geo === 'international') s += 10;
-  return s;
-}
-
-function showResults() {
-  const name = document.getElementById('fname').value.trim();
-  document.getElementById('landing').style.display = 'none';
-  document.getElementById('survey').style.display = 'none';
-  document.getElementById('results').style.display = 'block';
-
-  document.getElementById('results-headline').textContent = name ? name + "\u2019s Best-Fit Programs" : "Your Best-Fit Programs";
-
-  const scored = PROGRAMS.map(p => ({ ...p, score: scoreProgram(p, answers) }))
-    .sort((a, b) => b.score - a.score)
-    .filter(p => p.score > 20)
-    .slice(0, 5);
-
-  const top = scored.length >= 3 ? scored : PROGRAMS.slice(0, 3);
-  const container = document.getElementById('cards');
-  container.innerHTML = '';
-
-  top.forEach((p, i) => {
-    const badgeClass = i === 0 ? 'strong' : i <= 2 ? 'good' : 'consider';
-    const badgeLabel = i === 0 ? 'Strong Fit' : i <= 2 ? 'Good Fit' : 'Worth Considering';
-    const reasons = p.reasons.map(r => `<div class="reason"><span class="reason-dash">—</span>${r}</div>`).join('');
-    container.innerHTML += `
-      <div class="school-card">
-        <div class="card-top">
-          <div>
-            <div class="school-name">${p.name}</div>
-            <div class="program-name">${p.program}</div>
-          </div>
-          <div class="fit-badge ${badgeClass}">${badgeLabel}</div>
-        </div>
-        <div class="reasons">${reasons}</div>
-      </div>`;
-  });
-
-  window.scrollTo(0, 0);
-}
+function showLanding(){document.getElementById('landing').style.display='block';document.getElementById('survey').style.display='none';document.getElementById('results').style.display='none';window.scrollTo(0,0)}
+function startSurvey(){document.getElementById('landing').style.display='none';document.getElementById('survey').style.display='block';document.getElementById('results').style.display='none';goTo(1)}
+function resetAll(){Object.keys(answers).forEach(k=>delete answers[k]);multiAnswers.driver=[];document.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));document.getElementById('fname').value='';document.getElementById('femail').value='';document.getElementById('consent').checked=false;for(let i=1;i<=TOTAL;i++){const b=document.getElementById('n'+i);if(b)b.disabled=true}showLanding()}
+function goTo(n){document.querySelectorAll('.q-step').forEach(s=>s.classList.remove('active'));document.getElementById('q'+n).classList.add('active');currentStep=n;const pct=Math.round(n/TOTAL*100);document.getElementById('prog-fill').style.width=pct+'%';document.getElementById('prog-label').textContent='Step '+n+' of '+TOTAL;window.scrollTo(0,0)}
+function next(from){if(from<TOTAL)goTo(from+1)}
+function prev(from){if(from>1)goTo(from-1)}
+function pick(key,val,el){answers[key]=val;el.closest('.options').querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');document.getElementById('n'+parseInt(el.closest('.q-step').id.replace('q',''))).disabled=false}
+function pickMulti(key,val,el,max){const arr=multiAnswers[key];const idx=arr.indexOf(val);if(idx===-1){if(arr.length>=max)return;arr.push(val);el.classList.add('sel')}else{arr.splice(idx,1);el.classList.remove('sel')}answers[key]=arr;document.getElementById('n'+parseInt(el.closest('.q-step').id.replace('q',''))).disabled=arr.length===0}
+function checkEmail(){const n=document.getElementById('fname').value.trim();const e=document.getElementById('femail').value.trim();const c=document.getElementById('consent').checked;document.getElementById('n13').disabled=!(n&&e.includes('@')&&c)}
+function scoreProgram(p,ans){let s=0;if(p.experience.includes(ans.experience))s+=20;if(p.stage.includes(ans.stage)||(ans.stage==='founder'&&p.strengths.some(x=>x.includes('entrepre'))))s+=15;if(p.industries.includes(ans.industry))s+=10;(ans.driver||[]).forEach(d=>{if(d==='venture'&&p.strengths.some(x=>x.includes('entrepre')))s+=8;if(d==='level-up'&&p.prestige==='global_top10')s+=5;if(d==='pivot'&&p.strengths.includes('general-management'))s+=5;if(d==='network'&&p.prestige==='global_top10')s+=6;if(d==='reinvention'&&p.global)s+=4;if(d==='senior-role'&&(p.stage.includes('very-senior')||p.prestige==='global_top10'))s+=5});if(p.outcomes.includes(ans.outcome))s+=15;const fmt=p.format.includes(ans.format)||(ans.format==='blended'&&p.format.includes('modular'))||(ans.format==='global-residencies'&&p.global);if(fmt)s+=20;if(p.geo.includes(ans.geo)||p.geo.includes('flexible')||ans.geo==='flexible')s+=10;if(ans.global==='essential'&&p.global)s+=12;if(ans.global==='essential'&&!p.global)s-=15;if(ans.global==='not-important'&&p.global)s-=10;if(ans.global==='not-important'&&!p.global)s+=5;if(ans.prestige==='critical'&&p.prestige==='global_top10')s+=12;if(ans.prestige==='critical'&&p.prestige==='strong_regional')s-=20;if(ans.prestige==='low'&&p.prestige==='global_top10')s-=8;if(ans.prestige==='low'&&p.prestige==='strong_regional')s+=8;if(p.budget.includes(ans.budget))s+=8;if(ans.budget==='under-100k'&&!p.budget.includes('under-100k'))s-=20;if(ans.sponsored==='full'&&p.sponsored)s+=5;if(ans.experience==='20+'&&p.id==='trium_global_emba')s+=10;return s}
+function showResults(){const name=document.getElementById('fname').value.trim();document.getElementById('landing').style.display='none';document.getElementById('survey').style.display='none';document.getElementById('results').style.display='block';document.getElementById('results-headline').textContent=name?name+'\u2019s Best-Fit EMBA Programs':'Your Best-Fit EMBA Programs';const scored=PROGRAMS.map(p=>({...p,score:scoreProgram(p,answers)})).sort((a,b)=>b.score-a.score).filter(p=>p.score>15).slice(0,5);const top=scored.length>=3?scored:PROGRAMS.slice(0,3);const container=document.getElementById('cards');container.innerHTML='';top.forEach((p,i)=>{const bc=i===0?'fit-strong':i<=2?'fit-good':'fit-consider';const bl=i===0?'Strong Fit':i<=2?'Good Fit':'Worth Considering';const gt=p.global?'<span class="tag tag-gold">Global</span>':'';const rs=p.reasons.map(r=>`<div class="reason"><span class="reason-dash">—</span>${r}</div>`).join('');container.innerHTML+=`<div class="school-card"><div class="card-top"><div><div class="school-name">${p.school}</div><div class="program-name">${p.name}</div><div class="card-tags"><span class="tag">${p.region}</span><span class="tag">${p.type}</span>${gt}</div></div><div class="fit-badge ${bc}">${bl}</div></div><div class="reasons">${rs}</div></div>`});window.scrollTo(0,0)}
 </script>
 </body>
 </html>
